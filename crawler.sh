@@ -1,58 +1,58 @@
 #!/bin/bash
 
-# Vérifier si un paramètre a été fourni
+# Check if a parameter was provided
 if [ -z "$1" ]; then
-    echo "Erreur : Veuillez fournir une URL en paramètre."
+    echo "Erreur : Please provide a URL as a parameter."
     echo "Usage : $0 URL=https://www.example.com/sitemap.xml"
     exit 1
 fi
 
-# Extraire l'URL à partir du paramètre
+# Extract URL from parameter
 if [[ "$1" =~ ^URL=(.+)$ ]]; then
     SITEMAP_URL="${BASH_REMATCH[1]}"
 else
-    echo "Erreur : Le paramètre doit être au format URL=https://www.example.com/sitemap.xml"
+    echo "Error: Parameter must be in the format URL=https://www.example.com/sitemap.xml"
     exit 1
 fi
 
-# Télécharger le contenu du sitemap
-echo "Téléchargement du sitemap..."
+# Download sitemap content
+echo "Downloading the sitemap..."
 SITEMAP_CONTENT=$(curl -s "$SITEMAP_URL")
 
-# Vérifier si le téléchargement a réussi
+# Check if the download was successful
 if [ -z "$SITEMAP_CONTENT" ]; then
-    echo "Erreur : Impossible de télécharger le sitemap."
+    echo "Error: Unable to download sitemap."
     exit 1
 fi
 
-# Extraire les URLs du sitemap
-echo "Extraction des URLs..."
+# Extract URLs from a sitemap
+echo "Extracting URLs..."
 URLS=$(echo "$SITEMAP_CONTENT" | sed -n -e 's|.*<loc><!\[CDATA\[\(.*\)\]\]></loc>.*|\1|p')
 
-# Vérifier si des URLs ont été trouvées
+# Checking URLs
 if [ -z "$URLS" ]; then
-    echo "Erreur : Aucune URL trouvée dans le sitemap."
+    echo "Error: No URL found in sitemap."
     exit 1
 fi
 
-# Parcourir chaque URL et mesurer le temps
-echo "Début du crawl des URLs..."
+# Crawl each URL and measure the time
+echo "Start crawling URLs..."
 for URL in $URLS; do
     echo "Crawling: $URL"
 
-    # Effectuer la requête avec mesure du temps
-    START_TIME=$(date +%s.%N) # Début du chronomètre
+    # Perform query with time measurement
+    START_TIME=$(date +%s.%N) # Timer starts
     RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" "$URL")
-    END_TIME=$(date +%s.%N)   # Fin du chronomètre
+    END_TIME=$(date +%s.%N)   # End of timer
 
-    # Calcul du temps pris
+    # Calculation of time taken
     TIME_TAKEN=$(echo "$END_TIME - $START_TIME" | bc)
 
     if [ "$RESPONSE" -eq 200 ]; then
-        echo "Succès : $URL (Temps : ${TIME_TAKEN}s)"
+        echo "Success : $URL (Temps : ${TIME_TAKEN}s)"
     else
-        echo "Erreur ($RESPONSE) : $URL (Temps : ${TIME_TAKEN}s)"
+        echo "Error ($RESPONSE) : $URL (Temps : ${TIME_TAKEN}s)"
     fi
 done
 
-echo "Crawl terminé."
+echo "Crawl completed."
