@@ -2,7 +2,7 @@
 
 # Check if a parameter was provided
 if [ -z "$1" ]; then
-    echo "Erreur : Please provide a URL as a parameter."
+    echo "Error : Please provide a URL as a parameter."
     echo "Usage : $0 URL=https://www.example.com/sitemap.xml"
     exit 1
 fi
