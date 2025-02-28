@@ -1,8 +1,8 @@
 # crawler
-Script Bash permet de récupérer et d’analyser un fichier sitemap XML, puis de mesurer le temps de réponse pour chaque URL contenue dans le sitemap. 
-Il utilise curl pour télécharger le contenu du sitemap et effectuer des requêtes HTTP pour chaque URL, en mesurant le temps nécessaire pour obtenir une réponse. 
-Les résultats sont affichés avec le statut de chaque URL (succès ou erreur) et le temps de réponse en secondes.
+Bash script to retrieve and parse an XML sitemap file, then measure the response time for each URL contained in the sitemap.
+It uses curl to download the contents of the sitemap and make HTTP requests for each URL, measuring the time it takes to get a response.
+The results are displayed with the status of each URL (success or error) and the response time in seconds.
 
-# Exécution
+# Execution
 ./crawler.sh URL=https://www.example.com/sitemap.xml
 
